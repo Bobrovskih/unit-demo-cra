@@ -1,4 +1,4 @@
-name: Lint Commit Messages
+name: MyChecks
 on: [pull_request]
 
 jobs:
