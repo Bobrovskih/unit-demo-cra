@@ -25,7 +25,7 @@ npx playwright install
 npm run e2e
 ```
 
-Как запустить модульные тесты:
+Как запустить модульные тесты :
 
 ```sh
 npm test
