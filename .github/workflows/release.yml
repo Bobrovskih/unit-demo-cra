@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: git tag --list
+      - run: git --version
       - id: date
         run: echo "date="$(git log -1 --format=%ai ${{github.ref}}) >> "$GITHUB_OUTPUT"
       - id: author
