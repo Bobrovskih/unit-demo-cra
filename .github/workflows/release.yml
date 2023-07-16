@@ -19,7 +19,8 @@ jobs:
       - id: date
         run: echo "date="$(git log -1 --format=%ai ${{github.ref}}) >> "$GITHUB_OUTPUT"
       - run: export AUTHOR=$(git log -1 --format=%an ${{github.ref}})
-      - run: export CHANGE_LOG=$(git log --pretty=oneline $PREV_TAG...${{github.ref}})
+      - id: changelog
+        run: echo "changelog="$(git log --pretty=oneline $PREV_TAG...${{github.ref}}) >> "$GITHUB_OUTPUT"
       - run: export PREV_TAG=$(git describe --abbrev=0 --tags --exclude='$(git describe --abbrev=0 --tags)^')
       - name: Create Release
         uses: ncipollo/release-action@v1
@@ -30,4 +31,4 @@ jobs:
           body: |
             ${{ steps.date.outputs.date }}
             Changes in this Release
-            echo "$CHANGE_LOG"
+            echo ${{ steps.changelog.outputs.changelog }}
