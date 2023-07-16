@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: export DATE=$(git log -1 --format=%ai ${{github.ref}})
+      - run: echo "git log -1 --format=%ai ${{github.ref}}" >> ${{env.DATE}}
       - run: export AUTHOR=$(git log -1 --format=%an ${{github.ref}})
       - run: export CHANGE_LOG=$(git log --pretty=oneline $PREV_TAG...${{github.ref}})
       - run: export PREV_TAG=$(git describe --abbrev=0 --tags --exclude='$(git describe --abbrev=0 --tags)^')
