@@ -11,17 +11,17 @@ jobs:
     permissions: write-all
     name: Create Release
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.date.outputs.date }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - id: date
         run: echo "date="$(git log -1 --format=%ai ${{github.ref}}) >> "$GITHUB_OUTPUT"
-      - run: export AUTHOR=$(git log -1 --format=%an ${{github.ref}})
+      - id: author
+        run: echo "author="$(git log -1 --format=%an ${{github.ref}}) >> "$GITHUB_OUTPUT"
+      - id: prev_tag
+        run: echo "prev_tag="$(git describe --abbrev=0 --tags --exclude='$(git describe --abbrev=0 --tags)^') >> "$GITHUB_OUTPUT"
       - id: changelog
-        run: echo "changelog=tmp777" >> "$GITHUB_OUTPUT"
-      - run: export PREV_TAG=$(git describe --abbrev=0 --tags --exclude='$(git describe --abbrev=0 --tags)^')
+        run: echo "changelog="$(git log --pretty=oneline ${{ steps.prev_tag.outputs.prev_tag }}...${{github.ref}}) >> "$GITHUB_OUTPUT"
       - name: Create Release
         uses: ncipollo/release-action@v1
         id: create_release
@@ -31,4 +31,4 @@ jobs:
           body: |
             ${{ steps.date.outputs.date }}
             Changes in this Release
-            echo ${{ steps.changelog.outputs.changelog }}
+            ${{ steps.changelog.outputs.changelog }}
