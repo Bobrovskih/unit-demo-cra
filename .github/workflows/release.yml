@@ -21,10 +21,12 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         id: create_release
+        env:
+          DATE: tmp1
         with:
           tag: ${{ github.ref }}
           name: ${{ github.ref }}
           body: |
-            "$DATE $AUTHOR"
+            ${{env.DATE}}
             Changes in this Release
             echo "$CHANGE_LOG"
