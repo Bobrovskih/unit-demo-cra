@@ -11,12 +11,13 @@ jobs:
     permissions: write-all
     name: Create Release
     runs-on: ubuntu-latest
-    env:
-      DATE: "$(git log -1)"
+    outputs:
+      output1: ${{ steps.date.outputs.date }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: echo "git log -1 --format=%ai ${{github.ref}}" >> ${{env.DATE}}
+      - id: date
+        run: echo "date="+ $(git log -1 --format=%ai ${{github.ref}}) >> "$GITHUB_OUTPUT"
       - run: export AUTHOR=$(git log -1 --format=%an ${{github.ref}})
       - run: export CHANGE_LOG=$(git log --pretty=oneline $PREV_TAG...${{github.ref}})
       - run: export PREV_TAG=$(git describe --abbrev=0 --tags --exclude='$(git describe --abbrev=0 --tags)^')
@@ -27,6 +28,6 @@ jobs:
           tag: ${{ github.ref }}
           name: ${{ github.ref }}
           body: |
-            ${{env.DATE}}
+            ${{ steps.date.outputs.date }}
             Changes in this Release
             echo "$CHANGE_LOG"
