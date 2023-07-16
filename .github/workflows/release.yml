@@ -1,0 +1,30 @@
+name: Create Release
+on: [push]
+# on:
+#   push:
+#     # Sequence of patterns matched against refs/tags
+#     tags:
+#       - "v[0-9]+" # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build:
+    permissions: write-all
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: export DATE=$(git log -1 --format=%ai ${{github.ref}})
+      - run: export AUTHOR=$(git log -1 --format=%an ${{github.ref}})
+      - run: export CHANGE_LOG=$(git log --pretty=oneline $PREV_TAG...${{github.ref}})
+      - run: export PREV_TAG=$(git describe --abbrev=0 --tags --exclude='$(git describe --abbrev=0 --tags)^')
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        id: create_release
+        with:
+          tag: ${{ github.ref }}
+          name: ${{ github.ref }}
+          body: |
+            $DATE $AUTHOR
+            Changes in this Release
+            echo $CHANGE_LOG
