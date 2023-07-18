@@ -2,6 +2,9 @@ name: MyChecks
 on:
   pull_request:
   workflow_call:
+    outputs:
+      artifact-link:
+        value: ${{ jobs.link.outputs.output1 }}
 
 jobs:
   commitlint:

@@ -40,6 +40,6 @@ jobs:
           DATE: ${{steps.date.outputs.date}}
           CHANGELOG: ${{steps.mychangelog.outputs.chlg}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINK: ${{needs.pr_checks.outputs.link}}
+          LINK: ${{needs.pr_checks.outputs.artifact-link}}
         with:
           update_existing: true
